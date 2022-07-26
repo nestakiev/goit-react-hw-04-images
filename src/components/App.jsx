@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import { Container } from "./App.styled";
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
-import { ImageGalleryItem } from "./ImageGalleryItem/ImageGalleryItem";
 import { ThreeDots } from "react-loader-spinner";
 import { Button } from "./Button/Button";
 import { Modal } from "./Modal/Modal";
@@ -38,10 +37,10 @@ export const App = () => {
     try {
       setIsLoading(true);
       const image = await API.loadImage(query, page);
-      setItems(prevState => [...prevState, ...image.hits]);
+      setItems(prevState => [...prevState, ...image]);
       setIsLoading(false);
       
-      if(image.hits.length === 0) {
+      if(image.length === 0) {
         alert("Sorry, we can't find anyting for your request. Please, enter another request");
       }
     } catch (error) {
@@ -53,9 +52,7 @@ export const App = () => {
       <Container>
         <Searchbar onSubmit={onFormSubmit} isLoading={isLoading}/>
         {error && <p>{error}</p>}
-        <ImageGallery>
-          <ImageGalleryItem items={items} onClick={setCurrentLargeImageURL}/>
-        </ImageGallery>
+        {items.length > 0 && <ImageGallery items={items} onClick={setCurrentLargeImageURL}/>}
         {isLoading && (<ThreeDots
           height="50"
           width="50"
